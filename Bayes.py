@@ -36,7 +36,7 @@ def parseToJSON(dataFrame):
   return json.dumps(d)
 
 
-def Model(_tipo, _precio, _dia, _hora):
+def Model(_tipo, _precio,_quorum,_popularity, _dia, _hora):
     FALSE = 0
     TRUE = 1
 
@@ -50,9 +50,9 @@ def Model(_tipo, _precio, _dia, _hora):
     dia = Categorical([0.724137931, 0.275862069])
 
 
-    precio = Mixture(tipo, Categorical, [[0.2, 0.8], [0.6, 0.4]])
-    popularidad = Mixture(tipo, Categorical, [[0.4, 0.6], [0.7, 0.3]])
-    horario = Mixture(dia, Categorical, [[0.9, 0.1], [0.3,0.7]])
+    precio = Mixture(tipo, Categorical, [[0.4444444444, 0.5555555556], [0.55, 0.45]])
+    popularidad = Mixture(tipo, Categorical, [[0.1538461538, 0.8461538462], [0.125, 0.875]])
+    horario = Mixture(dia, Categorical, [[0.6923076923, 0.3076923077], [0.4285714286,0.5714285714]])
 
     rating = Mixture(precio, Mixture, popularidad, Categorical,
                   _or([0.6, 0.4], [0.2, 0.8]))
@@ -62,9 +62,11 @@ def Model(_tipo, _precio, _dia, _hora):
                         _or([0.4, 0.6], [0.01, 0.99])])
     
     tipo.observe(TRUE if _tipo == "nacional" else FALSE)
-    precio.observe(TRUE if _tipo == "economico" else FALSE)
-    dia.observe(TRUE if _tipo == "semana" else FALSE)
-    horario.observe(TRUE if _tipo == "tarde" else FALSE)
+    precio.observe(TRUE if _precio == "caro" else FALSE)
+    dia.observe(TRUE if _dia == "semana" else FALSE)
+    horario.observe(TRUE if _hora == "tarde" else FALSE)
+    aforo.observe(TRUE if _quorum == "normal" else FALSE)
+    popularidad.observe(TRUE if _popularity == "no popular" else FALSE)
 
     Q = VB(tipo, aforo, dia, precio, popularidad, horario, rating, disponibilidad)
     Q.update(repeat=100)
@@ -92,7 +94,13 @@ def Bayes(_tipo, _precio, _dia, _hora):
         restaurants.append(restaurant)
 
     for restaurant in restaurants:
-        model = Model(restaurant.tipo, restaurant.price, _dia, _hora)
+        model = Model(
+            restaurant.tipo, 
+            restaurant.price, 
+            restaurant.quorum,
+            restaurant.popularity,
+            _dia, 
+            _hora)
         restaurant.apreciation = model['rating']
         restaurant.disponibilidad = model['disp']
     return restaurants
