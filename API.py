@@ -16,6 +16,13 @@ def API_example():
         return obj.__dict__
     json_string = json.dumps(restaurants, default=obj_dict)
     json_loads = json.loads(json_string)
+
+    length = len(json_loads)
+
+    for i in range(0,length):
+        json_loads[i]['rating'] = str(json_loads[i]['rating'])
+
+
     return jsonify({'restaurants': json_loads})
 
 
