@@ -15,7 +15,8 @@ def API_example():
     def obj_dict(obj):
         return obj.__dict__
     json_string = json.dumps(restaurants, default=obj_dict)
-    return jsonify({'restaurants': json_string})
+    json_loads = json.loads(json_string)
+    return jsonify({'restaurants': json_loads})
 
 
 
