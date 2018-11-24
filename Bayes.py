@@ -45,9 +45,9 @@ def Model(_tipo, _precio, _dia, _hora):
         return np.take([p_false, p_true], [[FALSE, TRUE], [TRUE, TRUE]], axis=0)
 
    
-    tipo = Categorical([0.7, 0.3])
-    aforo = Categorical([0.3, 0.7])
-    dia = Categorical([0.8, 0.2])
+    tipo = Categorical([0.6896551724, 0.3103448276])
+    aforo = Categorical([0.4, 0.6])
+    dia = Categorical([0.724137931, 0.275862069])
 
 
     precio = Mixture(tipo, Categorical, [[0.2, 0.8], [0.6, 0.4]])
