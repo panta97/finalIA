@@ -21,6 +21,8 @@ def API_example():
 
     for i in range(0,length):
         json_loads[i]['rating'] = str(json_loads[i]['rating'])
+        json_loads[i]['apreciation'] = str(json_loads[i]['apreciation'])
+        json_loads[i]['disponibilidad'] = str(json_loads[i]['disponibilidad'])
 
 
     return jsonify({'restaurants': json_loads})
